@@ -1,0 +1,4 @@
+name: UltimateBottles
+version: ${project.version}
+main: com.songoda.ultimatebottles.UltimateBottles
+authors: [GB6]

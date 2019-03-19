@@ -1,0 +1,52 @@
+item:
+  material: "EXP_BOTTLE"
+  display-name: "&a&lExperience Bottle &r&7(Throw)"
+  lore:
+    - "&dValue &f{amount} XP"
+    - "&dEnchanter &f{who}"
+
+minimum-bottle-amount: 25
+
+commands:
+  xpbottle: "xpbottle"
+  xp: "xp"
+
+messages:
+  bound:
+    lower-too-low: "&cLower bound must be greater than the minimum bottle amount."
+    upper-greater-than-lower: "&cUpper bound must be greater than lower bound."
+  used-message: "&a&l+ {amount} XP"
+  reloaded: "&aConfiguration files reloaded!"
+  player-only: "&cThis command can only be used by players."
+  bottled: "&c&l- {amount} XP"
+  max-exp-reached: "&cYou have reached the maximum amount of EXP"
+  minimum-bottle-amount: "&cThe minimum bottle amount is {minimum}"
+  too-large-number: "&cToo large number"
+  not-enough-exp:
+    - "&cYou only have {amount} xp points to convert."
+    - "&7View your exp values with /xp"
+  syntax:
+    - "&e/xpbottle <amount>"
+    - "&7Converts <amount> xp into bottle form."
+    - "&7Use &e/xp &7to view your current xp points."
+  give:
+    syntax: "&c/xpbottle give {player-name} {amount}"
+    given: "&aYou have given an xp-bottle to {player}"
+    received: "&aYou have received an xp-bottle from {sender}"
+  cool-down:
+    on-cool-down:
+      - "&c&l(!) &r&cYou cannot use this command due to EXP exhaustion."
+      - "&7You are still on exhaustion for {time}."
+    started:
+      - "&eYou are now afflicted with &nEXP Exhaustion&r for {time}."
+      - "&eYou &ncannot&r use /xpbottle and /examplecommand while EXP Exhausted."
+  xp:
+    yourself: "&7You currently have &n&f{amount}&r &7EXP"
+    other: "&n&f{target}&r &7currently has &n&f{amount}&r &7EXP"
+
+cool-down:
+  enabled: true
+  time-in-minutes: 15
+  prohibited-commands:
+    - "xpbottle"
+    - "examplecommand"

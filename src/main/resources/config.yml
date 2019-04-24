@@ -33,6 +33,7 @@ messages:
     syntax: "&c/xpbottle give {player-name} {amount}"
     given: "&aYou have given an xp-bottle to {player}"
     received: "&aYou have received an xp-bottle from {sender}"
+    givenall: "&aYou gave all online players an EXP Bottle."
   cool-down:
     on-cool-down:
       - "&c&l(!) &r&cYou cannot use this command due to EXP exhaustion."

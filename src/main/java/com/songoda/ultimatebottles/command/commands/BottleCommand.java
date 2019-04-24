@@ -7,6 +7,7 @@ import com.songoda.ultimatebottles.UltimateBottles;
 import com.songoda.ultimatebottles.objects.AmountObject;
 import com.songoda.ultimatebottles.utils.Experience;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
@@ -57,6 +58,19 @@ public class BottleCommand extends BaseCommand {
         target.getInventory().addItem(instance.createBottle(sender.getName(), amount.getValue()));
         instance.getLang().sendMessage(target, "give.received", of("sender", sender.getName()));
         instance.getLang().sendMessage(sender, "give.given", of("player", target.getName()));
+    }
+
+    @Subcommand("giveall")
+    @Description("Give EXP bottles to all online players")
+    @CommandCompletion("@nothing")
+    @CommandPermission("ultimatebottles.command.giveall")
+    public void onGive(CommandSender sender, AmountObject amount) {
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            player.getInventory().addItem(instance.createBottle(sender.getName(), amount.getValue()));
+            instance.getLang().sendMessage(player, "give.received", of("sender", sender.getName()));
+        });
+
+        instance.getLang().sendMessage(sender, "give.givenall");
     }
 
     @Default

@@ -4,6 +4,7 @@ import com.songoda.ultimatebottles.utils.Experience;
 import com.songoda.ultimatebottles.UltimateBottles;
 import de.tr7zw.itemnbtapi.NBTItem;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -11,8 +12,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-
-import static org.apache.commons.lang3.tuple.Pair.of;
 
 public class BottleListener implements Listener {
     private final UltimateBottles instance;
@@ -43,12 +42,12 @@ public class BottleListener implements Listener {
         long amount = nbtItem.getLong("xp-bottle");
 
         if (Experience.getTotalExperience(event.getPlayer()) + amount > Integer.MAX_VALUE) {
-            instance.getLang().sendMessage(event.getPlayer(), "max-exp-reached");
+            instance.getLocale().getMessage("event.throw.max").sendPrefixedMessage(event.getPlayer());
             return;
         }
 
         Experience.setTotalExperience(event.getPlayer(), (int) (Experience.getTotalExperience(event.getPlayer()) + amount));
-        instance.getLang().sendMessage(event.getPlayer(), "used-message", of("amount", "" + amount));
+        instance.getLocale().getMessage("event.throw.used").processPlaceholder("amount", amount).sendMessage(event.getPlayer());
 
         int slot = event.getPlayer().getInventory().getHeldItemSlot();
 

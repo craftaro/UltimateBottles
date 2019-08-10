@@ -1,8 +1,8 @@
 package com.songoda.ultimatebottles;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Collections;
 import java.util.List;

@@ -1,8 +1,8 @@
 package com.songoda.ultimatebottles;
 
-import co.aikar.commands.BukkitCommandManager;
 import com.songoda.ultimatebottles.command.CommandManager;
 import com.songoda.ultimatebottles.listeners.BottleListener;
+import com.songoda.ultimatebottles.utils.locale.Locale;
 import de.tr7zw.itemnbtapi.NBTItem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -12,7 +12,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -21,9 +23,12 @@ import static com.songoda.ultimatebottles.Lang.color;
 import static org.bukkit.Bukkit.getConsoleSender;
 
 public final class UltimateBottles extends JavaPlugin {
+
+    private static UltimateBottles instance;
     private Map<UUID, Long> cooldownMap;
     private Lang lang;
-    private BukkitCommandManager commandManager;
+    private CommandManager commandManager;
+    private Locale locale;
 
     @Override
     public void onEnable() {
@@ -31,11 +36,16 @@ public final class UltimateBottles extends JavaPlugin {
         getConsoleSender().sendMessage(color("&7" + getDescription().getName() + " " + getDescription().getVersion() + " by &5Songoda <3&7!"));
         getConsoleSender().sendMessage(color("&7Action: &aEnabling&7..."));
 
+        instance = this;
+
         cooldownMap = new HashMap<>();
         lang = new Lang(this);
-        commandManager = new CommandManager(this);
+        this.commandManager = new CommandManager(this);
 
         saveDefaultConfig();
+
+        new Locale(this, "en_US");
+        this.locale = Locale.getLocale(getConfig().getString("language-mode"));
 
         Bukkit.getPluginManager().registerEvents(new BottleListener(this), this);
 
@@ -65,14 +75,14 @@ public final class UltimateBottles extends JavaPlugin {
         ItemStack itemStack = new ItemStack(material);
         ItemMeta meta = itemStack.getItemMeta();
 
-        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', section.getString("display-name")
-                .replace("{amount}", "" + amount)
-                .replace("{who}", creator)));
+        meta.setDisplayName(locale.getMessage("general.bottle.name").getMessage());
 
-        meta.setLore(section.getStringList("lore").stream()
-                .map(s -> ChatColor.translateAlternateColorCodes('&', s
-                        .replace("{amount}", "" + amount)
-                        .replace("{who}", creator))).collect(Collectors.toList()));
+        List<String> lore = new ArrayList<>();
+        String[] loreSplit = locale.getMessage("general.bottle.lore")
+                .processPlaceholder("amount", amount)
+                .processPlaceholder("who", creator).getMessage().split("\\|");
+        for (String line : loreSplit) lore.add(line);
+        meta.setLore(lore);
 
         itemStack.setItemMeta(meta);
 
@@ -83,5 +93,17 @@ public final class UltimateBottles extends JavaPlugin {
 
     public Lang getLang() {
         return lang;
+    }
+
+    public static UltimateBottles getInstance() {
+        return instance;
+    }
+
+    public CommandManager getCommandManager() {
+        return commandManager;
+    }
+
+    public Locale getLocale() {
+        return locale;
     }
 }

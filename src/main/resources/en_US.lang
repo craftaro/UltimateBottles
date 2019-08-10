@@ -1,0 +1,27 @@
+# General Messages
+
+general.nametag.prefix = "&8[&6UltimateBottles&8]"
+general.bottle.name = "&a&lExperience Bottle &r&7(Throw)"
+general.bottle.lore = "&dValue &f%amount% XP|&dEnchanter &f%who%"
+
+# Command Messages
+
+command.general.playernotfound = "&cThis player is not online or doesn't exist."
+command.general.noperms = "&cYou do not have permission to do that!"
+command.general.player-only = "&cThis command can only be used by players."
+command.general.notanumber = "&cThis is not a number."
+command.general.minimum = "&cThe minimum bottle amount is %minimum%"
+command.reload.reloaded = "&aConfiguration and language files reloaded!"
+command.bottle.bottled = "&c&l- %amount% XP"
+command.bottle.notenough = "&cYou only have %amount% xp points to convert. &7View your exp values with /xp"
+command.check.self = "&7You currently have &n&f%amount%&r &7EXP."
+command.check.other = "&n&f%target%&r &7currently has &n&f%amount%&r &7EXP."
+command.give.given = "&aYou have given an xp-bottle to %player%."
+command.give.received = "&aYou have received an xp-bottle from %sender%."
+
+# Event Messages
+
+event.cooldown.oncooldown = "&c&l(!) &r&cYou cannot use this commandold due to EXP exhaustion. &7You are still on exhaustion for %time%."
+event.cooldown.started = "&eYou are now afflicted with &nEXP Exhaustion&r for %time%. &eYou &ncannot&r use /bottle while EXP Exhausted."
+event.throw.used = "&a&l+ %amount% XP"
+event.throw.max = "&cYou have reached the maximum amount of EXP."

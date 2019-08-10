@@ -1,4 +1,12 @@
 name: UltimateBottles
-version: ${project.version}
 main: com.songoda.ultimatebottles.UltimateBottles
-authors: [GB6]
+version: maven-version-number
+author: Songoda
+api-version: 1.13
+commands:
+  ultimatebottles:
+    description: View information on this plugin.
+    default: true
+    aliases: [ub, bottles, bottle]
+    usage: /<command> [reload]
+

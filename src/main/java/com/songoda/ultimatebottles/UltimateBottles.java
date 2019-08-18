@@ -3,6 +3,9 @@ package com.songoda.ultimatebottles;
 import com.songoda.ultimatebottles.command.CommandManager;
 import com.songoda.ultimatebottles.listeners.BottleListener;
 import com.songoda.ultimatebottles.utils.locale.Locale;
+import com.songoda.ultimatebottles.utils.updateModules.LocaleModule;
+import com.songoda.update.Plugin;
+import com.songoda.update.SongodaUpdate;
 import de.tr7zw.itemnbtapi.NBTItem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -46,6 +49,11 @@ public final class UltimateBottles extends JavaPlugin {
 
         new Locale(this, "en_US");
         this.locale = Locale.getLocale(getConfig().getString("language-mode"));
+
+        //Running Songoda Updater
+        Plugin plugin = new Plugin(this, 68);
+        plugin.addModule(new LocaleModule());
+        SongodaUpdate.load(plugin);
 
         Bukkit.getPluginManager().registerEvents(new BottleListener(this), this);
 

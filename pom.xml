@@ -6,7 +6,7 @@
 
     <groupId>com.songoda</groupId>
     <artifactId>UltimateBottles</artifactId>
-    <version>1.0.0</version>
+    <version>1</version>
     <packaging>jar</packaging>
 
     <name>UltimateBottles</name>
@@ -26,9 +26,6 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                    <compilerArgs>
-                        <arg>-parameters</arg>
-                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>
@@ -37,25 +34,35 @@
                 <version>3.1.0</version>
                 <executions>
                     <execution>
+                        <id>shaded</id>
                         <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <minimizeJar>true</minimizeJar>
+                            <shadedArtifactAttached>false</shadedArtifactAttached>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <artifactSet>
+                                <includes>
+                                    <include>com.songoda:songodaupdater</include>
+                                </includes>
+                            </artifactSet>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
     </build>
-
     <repositories>
         <repository>
             <id>private</id>
@@ -68,6 +75,11 @@
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>com.songoda</groupId>
+            <artifactId>songodaupdater</artifactId>
+            <version>1</version>
+        </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>

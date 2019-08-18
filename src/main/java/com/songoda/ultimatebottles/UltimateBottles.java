@@ -2,6 +2,7 @@ package com.songoda.ultimatebottles;
 
 import com.songoda.ultimatebottles.command.CommandManager;
 import com.songoda.ultimatebottles.listeners.BottleListener;
+import com.songoda.ultimatebottles.utils.Metrics;
 import com.songoda.ultimatebottles.utils.locale.Locale;
 import com.songoda.ultimatebottles.utils.updateModules.LocaleModule;
 import com.songoda.update.Plugin;
@@ -56,6 +57,9 @@ public final class UltimateBottles extends JavaPlugin {
         SongodaUpdate.load(plugin);
 
         Bukkit.getPluginManager().registerEvents(new BottleListener(this), this);
+
+        // Starting Metrics
+        new Metrics(this);
 
         getConsoleSender().sendMessage(color("&a============================="));
     }

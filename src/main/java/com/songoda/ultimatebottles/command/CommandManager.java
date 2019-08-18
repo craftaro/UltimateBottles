@@ -1,11 +1,7 @@
 package com.songoda.ultimatebottles.command;
 
 import com.songoda.ultimatebottles.UltimateBottles;
-import com.songoda.ultimatebottles.command.commands.CommandBottle;
-import com.songoda.ultimatebottles.command.commands.CommandCheck;
-import com.songoda.ultimatebottles.command.commands.CommandGive;
-import com.songoda.ultimatebottles.command.commands.CommandReload;
-import com.songoda.ultimatebottles.command.commands.CommandUltimateBottles;
+import com.songoda.ultimatebottles.command.commands.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

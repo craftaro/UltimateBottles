@@ -3,25 +3,19 @@ package com.songoda.ultimatebottles;
 import com.songoda.ultimatebottles.command.CommandManager;
 import com.songoda.ultimatebottles.listeners.BottleListener;
 import com.songoda.ultimatebottles.utils.Metrics;
+import com.songoda.ultimatebottles.utils.itemnbtapi.NBTItem;
 import com.songoda.ultimatebottles.utils.locale.Locale;
 import com.songoda.ultimatebottles.utils.updateModules.LocaleModule;
 import com.songoda.update.Plugin;
 import com.songoda.update.SongodaUpdate;
-import de.tr7zw.itemnbtapi.NBTItem;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import java.util.*;
 
 import static com.songoda.ultimatebottles.Lang.color;
 import static org.bukkit.Bukkit.getConsoleSender;
@@ -33,6 +27,10 @@ public final class UltimateBottles extends JavaPlugin {
     private Lang lang;
     private CommandManager commandManager;
     private Locale locale;
+
+    public static UltimateBottles getInstance() {
+        return instance;
+    }
 
     @Override
     public void onEnable() {
@@ -105,10 +103,6 @@ public final class UltimateBottles extends JavaPlugin {
 
     public Lang getLang() {
         return lang;
-    }
-
-    public static UltimateBottles getInstance() {
-        return instance;
     }
 
     public CommandManager getCommandManager() {

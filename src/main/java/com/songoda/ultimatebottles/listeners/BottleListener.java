@@ -1,10 +1,9 @@
 package com.songoda.ultimatebottles.listeners;
 
-import com.songoda.ultimatebottles.utils.Experience;
 import com.songoda.ultimatebottles.UltimateBottles;
-import de.tr7zw.itemnbtapi.NBTItem;
+import com.songoda.ultimatebottles.utils.Experience;
+import com.songoda.ultimatebottles.utils.itemnbtapi.NBTItem;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -66,7 +65,6 @@ public class BottleListener implements Listener {
 
         event.getPlayer().getInventory().clear(slot);
     }
-
 
 
 //    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)

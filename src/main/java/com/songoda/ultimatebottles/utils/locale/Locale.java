@@ -24,11 +24,8 @@ public class Locale {
     private static final String FILE_EXTENSION = ".lang";
     private static JavaPlugin plugin;
     private static File localeFolder;
-
-    private final Map<String, String> nodes = new HashMap<>();
-
     private static String defaultLocale;
-
+    private final Map<String, String> nodes = new HashMap<>();
     private File file;
     private String name;
 
@@ -203,6 +200,19 @@ public class Locale {
         return null;
     }
 
+    private static void copy(InputStream input, OutputStream output) {
+        int n;
+        byte[] buffer = new byte[1024 * 4];
+
+        try {
+            while ((n = input.read(buffer)) != -1) {
+                output.write(buffer, 0, n);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Clear the previous message cache and load new messages directly from file
      *
@@ -284,19 +294,6 @@ public class Locale {
      */
     public String getName() {
         return name;
-    }
-
-    private static void copy(InputStream input, OutputStream output) {
-        int n;
-        byte[] buffer = new byte[1024 * 4];
-
-        try {
-            while ((n = input.read(buffer)) != -1) {
-                output.write(buffer, 0, n);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 }

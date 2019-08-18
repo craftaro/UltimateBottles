@@ -5,7 +5,6 @@ import com.songoda.ultimatebottles.command.AbstractCommand;
 import com.songoda.ultimatebottles.utils.Experience;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;

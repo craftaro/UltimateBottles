@@ -16,6 +16,10 @@ public class Lang {
         this.instance = instance;
     }
 
+    public static String color(String toColor) {
+        return ChatColor.translateAlternateColorCodes('&', toColor);
+    }
+
     public void sendMessage(CommandSender sender, String path, Pair... placeholder) {
         getMessage(path, placeholder).forEach(sender::sendMessage);
     }
@@ -43,9 +47,5 @@ public class Lang {
             }
             return s == null ? "" : color(s);
         }).filter(s -> !s.isEmpty()).collect(Collectors.toList());
-    }
-
-    public static String color(String toColor) {
-        return ChatColor.translateAlternateColorCodes('&', toColor);
     }
 }

@@ -13,14 +13,14 @@ public class RangeObject implements Get {
     }
 
     public static Optional<RangeObject> of(String value) {
-        if(value.split("-").length != 2) {
+        if (value.split("-").length != 2) {
             return Optional.empty();
         }
 
         Optional<XPObject> lower = XPObject.of(value.split("-")[0]);
         Optional<XPObject> upper = XPObject.of(value.split("-")[1]);
 
-        if(!lower.isPresent() || !upper.isPresent()) {
+        if (!lower.isPresent() || !upper.isPresent()) {
             return Optional.empty();
         }
 

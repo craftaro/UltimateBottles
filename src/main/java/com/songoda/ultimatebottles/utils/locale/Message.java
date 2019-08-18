@@ -68,8 +68,8 @@ public class Message {
      * @return the prefixed message
      */
     public String getPrefixedMessage() {
-        return ChatColor.translateAlternateColorCodes('&',(prefix == null ? "" : this.prefix)
-                + " " +  this.message);
+        return ChatColor.translateAlternateColorCodes('&', (prefix == null ? "" : this.prefix)
+                + " " + this.message);
     }
 
     /**
@@ -91,8 +91,8 @@ public class Message {
     }
 
     /**
-     *  Replace the provided placeholder with the
-     *  provided object
+     * Replace the provided placeholder with the
+     * provided object
      *
      * @param placeholder the placeholder to replace
      * @param replacement the replacement object

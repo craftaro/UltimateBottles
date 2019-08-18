@@ -45,7 +45,6 @@
                             <artifactSet>
                                 <includes>
                                     <include>com.songoda:songodaupdater</include>
-                                    <include>com.github.tr7zw:Item-NBT-API</include>
                                 </includes>
                             </artifactSet>
                             <filters>
@@ -86,12 +85,6 @@
             <artifactId>spigot</artifactId>
             <version>1.14.1</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.tr7zw</groupId>
-            <artifactId>Item-NBT-API</artifactId>
-            <version>1.8.3</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

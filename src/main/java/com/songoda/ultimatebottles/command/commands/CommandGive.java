@@ -3,7 +3,6 @@ package com.songoda.ultimatebottles.command.commands;
 import com.songoda.ultimatebottles.UltimateBottles;
 import com.songoda.ultimatebottles.command.AbstractCommand;
 import com.songoda.ultimatebottles.objects.AmountObject;
-import com.songoda.ultimatebottles.utils.Experience;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

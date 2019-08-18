@@ -45,6 +45,7 @@
                             <artifactSet>
                                 <includes>
                                     <include>com.songoda:songodaupdater</include>
+                                    <include>com.github.tr7zw:Item-NBT-API</include>
                                 </includes>
                             </artifactSet>
                             <filters>

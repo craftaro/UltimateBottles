@@ -30,6 +30,7 @@ public class CommandManager implements CommandExecutor {
         addCommand(new CommandCheck(commandUltimateBottles));
         addCommand(new CommandGive(commandUltimateBottles));
         addCommand(new CommandBottle(commandUltimateBottles));
+        addCommand(new CommandSettings(commandUltimateBottles));
 
         for (AbstractCommand abstractCommand : commands) {
             if (abstractCommand.getParent() != null) continue;

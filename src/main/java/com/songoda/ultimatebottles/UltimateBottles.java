@@ -3,14 +3,17 @@ package com.songoda.ultimatebottles;
 import com.songoda.ultimatebottles.command.CommandManager;
 import com.songoda.ultimatebottles.listeners.BottleListener;
 import com.songoda.ultimatebottles.utils.Metrics;
+import com.songoda.ultimatebottles.utils.ServerVersion;
 import com.songoda.ultimatebottles.utils.itemnbtapi.NBTItem;
 import com.songoda.ultimatebottles.utils.locale.Locale;
+import com.songoda.ultimatebottles.utils.settings.Setting;
+import com.songoda.ultimatebottles.utils.settings.SettingsManager;
 import com.songoda.ultimatebottles.utils.updateModules.LocaleModule;
 import com.songoda.update.Plugin;
 import com.songoda.update.SongodaUpdate;
+import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -24,9 +27,11 @@ public final class UltimateBottles extends JavaPlugin {
 
     private static UltimateBottles instance;
     private Map<UUID, Long> cooldownMap;
+    private ServerVersion serverVersion = ServerVersion.fromPackageName(Bukkit.getServer().getClass().getPackage().getName());
     private Lang lang;
     private CommandManager commandManager;
     private Locale locale;
+    private SettingsManager settingsManager;
 
     public static UltimateBottles getInstance() {
         return instance;
@@ -40,14 +45,15 @@ public final class UltimateBottles extends JavaPlugin {
 
         instance = this;
 
+        this.settingsManager = new SettingsManager(this);
+        this.settingsManager.setupConfig();
+
         cooldownMap = new HashMap<>();
         lang = new Lang(this);
         this.commandManager = new CommandManager(this);
 
-        saveDefaultConfig();
-
         new Locale(this, "en_US");
-        this.locale = Locale.getLocale(getConfig().getString("language-mode"));
+        this.locale = Locale.getLocale(Setting.LANGUGE_MODE.getString());
 
         //Running Songoda Updater
         Plugin plugin = new Plugin(this, 68);
@@ -75,12 +81,7 @@ public final class UltimateBottles extends JavaPlugin {
     }
 
     public ItemStack createBottle(String creator, long amount) {
-        ConfigurationSection section = getConfig().getConfigurationSection("item");
-        Material material = Material.matchMaterial(section.getString("material"));
-
-        if (material == null) {
-            throw new IllegalStateException("Invalid material: " + section.getString("material"));
-        }
+        Material material = Setting.BOTTLE_ITEM.getMaterial();
 
         ItemStack itemStack = new ItemStack(material);
         ItemMeta meta = itemStack.getItemMeta();
@@ -101,6 +102,22 @@ public final class UltimateBottles extends JavaPlugin {
         return nbtItem.getItem();
     }
 
+    public ServerVersion getServerVersion() {
+        return serverVersion;
+    }
+
+    public boolean isServerVersion(ServerVersion version) {
+        return serverVersion == version;
+    }
+
+    public boolean isServerVersion(ServerVersion... versions) {
+        return ArrayUtils.contains(versions, serverVersion);
+    }
+
+    public boolean isServerVersionAtLeast(ServerVersion version) {
+        return serverVersion.ordinal() >= version.ordinal();
+    }
+
     public Lang getLang() {
         return lang;
     }
@@ -111,5 +128,9 @@ public final class UltimateBottles extends JavaPlugin {
 
     public Locale getLocale() {
         return locale;
+    }
+
+    public SettingsManager getSettingsManager() {
+        return settingsManager;
     }
 }

@@ -4,6 +4,7 @@ import com.songoda.ultimatebottles.UltimateBottles;
 import com.songoda.ultimatebottles.command.AbstractCommand;
 import com.songoda.ultimatebottles.objects.AmountObject;
 import com.songoda.ultimatebottles.utils.Experience;
+import com.songoda.ultimatebottles.utils.settings.Setting;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.StringUtils;
 import org.bukkit.entity.Player;
@@ -48,9 +49,9 @@ public class CommandBottle extends AbstractCommand {
             return ReturnType.FAILURE;
         }
 
-        if (instance.getConfig().getInt("minimum-bottle-amount") > toBottle) {
+        if (Setting.MIN_BOTTLE_AMOUNT.getInt() > toBottle) {
             instance.getLocale().getMessage("command.general.minimum")
-                    .processPlaceholder("minimum", instance.getConfig().getInt("minimum-bottle-amount")).sendPrefixedMessage(player);
+                    .processPlaceholder("minimum", Setting.MIN_BOTTLE_AMOUNT.getInt()).sendPrefixedMessage(player);
             return ReturnType.FAILURE;
         }
 
@@ -59,7 +60,7 @@ public class CommandBottle extends AbstractCommand {
         instance.getLocale().getMessage("command.bottle.bottled")
                 .processPlaceholder("amount", toBottle).sendMessage(player);
 
-        if (!player.hasPermission("ultimatebottles.cooldown.override") && instance.getConfig().getBoolean("cool-down.enabled")) {
+        if (!player.hasPermission("ultimatebottles.cooldown.override") && Setting.COOLDOWN.getBoolean()) {
             long time = getCoolDownTime(player);
             instance.getLocale().getMessage("event.cooldown.started")
                     .processPlaceholder("time", instance.getLang().getCooldownMessage(time - System.currentTimeMillis()));
@@ -76,7 +77,7 @@ public class CommandBottle extends AbstractCommand {
                 .map(s -> s.replace("ultimatebottles.cooldown.", ""))
                 .filter(StringUtils::isNumeric)
                 .mapToInt(Integer::parseInt)
-                .max().orElse(UltimateBottles.getInstance().getConfig().getInt("cool-down.time-in-minutes")) * 60 * 1000 + System.currentTimeMillis();
+                .max().orElse(Setting.COOLDOWN_TIME.getInt()) * 60 * 1000 + System.currentTimeMillis();
     }
 
     @Override

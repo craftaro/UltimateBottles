@@ -1,5 +1,6 @@
 package com.songoda.ultimatebottles.utils;
 
+import com.songoda.core.compatibility.ServerVersion;
 import com.songoda.ultimatebottles.UltimateBottles;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

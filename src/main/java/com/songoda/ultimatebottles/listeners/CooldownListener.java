@@ -1,7 +1,7 @@
 package com.songoda.ultimatebottles.listeners;
 
 import com.songoda.ultimatebottles.UltimateBottles;
-import com.songoda.ultimatebottles.utils.settings.Setting;
+import com.songoda.ultimatebottles.settings.Settings;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -16,7 +16,7 @@ public class CooldownListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-        if (!Setting.COOLDOWN.getBoolean()) {
+        if (!Settings.COOLDOWN.getBoolean()) {
             return;
         }
 
@@ -27,7 +27,7 @@ public class CooldownListener implements Listener {
 
         String toCheck = event.getMessage().split(" ")[0].replace("/", "");
 
-        if (!Setting.BLOCKED_COMMANDS.getStringList().contains(toCheck)) {
+        if (!Settings.BLOCKED_COMMANDS.getStringList().contains(toCheck)) {
             return;
         }
 

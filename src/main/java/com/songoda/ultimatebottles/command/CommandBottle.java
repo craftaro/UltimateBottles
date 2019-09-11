@@ -1,10 +1,11 @@
-package com.songoda.ultimatebottles.command.commands;
+package com.songoda.ultimatebottles.command;
 
+import com.songoda.core.commands.AbstractCommand;
 import com.songoda.ultimatebottles.UltimateBottles;
-import com.songoda.ultimatebottles.command.AbstractCommand;
 import com.songoda.ultimatebottles.objects.AmountObject;
+import com.songoda.ultimatebottles.settings.Settings;
 import com.songoda.ultimatebottles.utils.Experience;
-import com.songoda.ultimatebottles.utils.settings.Setting;
+import com.songoda.ultimatebottles.utils.Methods;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.StringUtils;
 import org.bukkit.entity.Player;
@@ -17,29 +18,32 @@ import java.util.Optional;
 
 public class CommandBottle extends AbstractCommand {
 
-    public CommandBottle(AbstractCommand parent) {
-        super(parent, false, "bottle");
+    private final UltimateBottles instance;
+
+    public CommandBottle(UltimateBottles instance) {
+        super(false, "bottle");
+        this.instance = instance;
     }
 
     @Override
-    protected ReturnType runCommand(UltimateBottles instance, CommandSender sender, String... args) {
+    protected ReturnType runCommand(CommandSender sender, String... args) {
         Player player = (Player) sender;
 
-        if (args.length != 2) {
+        if (args.length != 1) {
             return ReturnType.SYNTAX_ERROR;
         }
 
-        if (!isInt(args[1]) && !args[1].equalsIgnoreCase("all")) {
+        if (!Methods.isNumeric(args[0]) && !args[0].equalsIgnoreCase("all")) {
             instance.getLocale().getMessage("command.general.notanumber").sendPrefixedMessage(player);
             return ReturnType.FAILURE;
         }
 
-        if (args[1].equalsIgnoreCase("all") && !player.hasPermission("ultimatebottles.bottleall")) {
+        if (args[0].equalsIgnoreCase("all") && !player.hasPermission("ultimatebottles.bottleall")) {
             instance.getLocale().getMessage("command.general.noperms").sendPrefixedMessage(player);
             return ReturnType.FAILURE;
         }
 
-        Optional<AmountObject> amountObject = args[1].equalsIgnoreCase("all") ? null : AmountObject.of(args[1]);
+        Optional<AmountObject> amountObject = args[0].equalsIgnoreCase("all") ? null : AmountObject.of(args[0]);
         int toBottle = amountObject != null ? amountObject.get().getValue() : Experience.getTotalExperience(player);
 
 
@@ -49,9 +53,9 @@ public class CommandBottle extends AbstractCommand {
             return ReturnType.FAILURE;
         }
 
-        if (Setting.MIN_BOTTLE_AMOUNT.getInt() > toBottle) {
+        if (Settings.MIN_BOTTLE_AMOUNT.getInt() > toBottle) {
             instance.getLocale().getMessage("command.general.minimum")
-                    .processPlaceholder("minimum", Setting.MIN_BOTTLE_AMOUNT.getInt()).sendPrefixedMessage(player);
+                    .processPlaceholder("minimum", Settings.MIN_BOTTLE_AMOUNT.getInt()).sendPrefixedMessage(player);
             return ReturnType.FAILURE;
         }
 
@@ -60,7 +64,7 @@ public class CommandBottle extends AbstractCommand {
         instance.getLocale().getMessage("command.bottle.bottled")
                 .processPlaceholder("amount", toBottle).sendMessage(player);
 
-        if (!player.hasPermission("ultimatebottles.cooldown.override") && Setting.COOLDOWN.getBoolean()) {
+        if (!player.hasPermission("ultimatebottles.cooldown.override") && Settings.COOLDOWN.getBoolean()) {
             long time = getCoolDownTime(player);
             instance.getLocale().getMessage("event.cooldown.started")
                     .processPlaceholder("time", instance.getLang().getCooldownMessage(time - System.currentTimeMillis()));
@@ -70,21 +74,9 @@ public class CommandBottle extends AbstractCommand {
         return ReturnType.SUCCESS;
     }
 
-    private long getCoolDownTime(Player player) {
-        return player.getEffectivePermissions().stream()
-                .map(PermissionAttachmentInfo::getPermission)
-                .filter(perm -> perm.startsWith("ultimatebottles.cooldown."))
-                .map(s -> s.replace("ultimatebottles.cooldown.", ""))
-                .filter(StringUtils::isNumeric)
-                .mapToInt(Integer::parseInt)
-                .max().orElse(Setting.COOLDOWN_TIME.getInt()) * 60 * 1000 + System.currentTimeMillis();
-    }
-
     @Override
-    protected List<String> onTab(UltimateBottles instance, CommandSender sender, String... args) {
-        if (args.length == 2) {
-            return Arrays.asList("all", "amount");
-        }
+    protected List<String> onTab(CommandSender sender, String... args) {
+        if (args.length == 1) return Arrays.asList("all", "amount");
 
         return new ArrayList<>();
     }
@@ -96,7 +88,7 @@ public class CommandBottle extends AbstractCommand {
 
     @Override
     public String getSyntax() {
-        return "/UltimateBottles bottle <amount/all>";
+        return "/ub bottle <amount/all>";
     }
 
     @Override
@@ -104,12 +96,13 @@ public class CommandBottle extends AbstractCommand {
         return "Bottle your EXP.";
     }
 
-    private boolean isInt(String str) {
-        try {
-            Integer.parseInt(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
+    private long getCoolDownTime(Player player) {
+        return player.getEffectivePermissions().stream()
+                .map(PermissionAttachmentInfo::getPermission)
+                .filter(perm -> perm.startsWith("ultimatebottles.cooldown."))
+                .map(s -> s.replace("ultimatebottles.cooldown.", ""))
+                .filter(StringUtils::isNumeric)
+                .mapToInt(Integer::parseInt)
+                .max().orElse(Settings.COOLDOWN_TIME.getInt()) * 60 * 1000 + System.currentTimeMillis();
     }
 }

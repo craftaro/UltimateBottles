@@ -1,79 +1,89 @@
 package com.songoda.ultimatebottles;
 
-import com.songoda.ultimatebottles.command.CommandManager;
+import com.songoda.core.SongodaCore;
+import com.songoda.core.SongodaPlugin;
+import com.songoda.core.commands.CommandManager;
+import com.songoda.core.compatibility.CompatibleMaterial;
+import com.songoda.core.compatibility.ServerVersion;
+import com.songoda.core.configuration.Config;
+import com.songoda.core.gui.GuiManager;
+import com.songoda.ultimatebottles.command.CommandBottle;
+import com.songoda.ultimatebottles.command.CommandCheck;
+import com.songoda.ultimatebottles.command.CommandGive;
+import com.songoda.ultimatebottles.command.CommandReload;
+import com.songoda.ultimatebottles.command.CommandSettings;
+import com.songoda.ultimatebottles.command.CommandUltimateBottles;
 import com.songoda.ultimatebottles.listeners.BottleListener;
-import com.songoda.ultimatebottles.utils.Metrics;
-import com.songoda.ultimatebottles.utils.ServerVersion;
+import com.songoda.ultimatebottles.settings.Settings;
 import com.songoda.ultimatebottles.utils.itemnbtapi.NBTItem;
-import com.songoda.ultimatebottles.utils.locale.Locale;
-import com.songoda.ultimatebottles.utils.settings.Setting;
-import com.songoda.ultimatebottles.utils.settings.SettingsManager;
-import com.songoda.ultimatebottles.utils.updateModules.LocaleModule;
-import com.songoda.update.Plugin;
-import com.songoda.update.SongodaUpdate;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
-import static com.songoda.ultimatebottles.Lang.color;
-import static org.bukkit.Bukkit.getConsoleSender;
-
-public final class UltimateBottles extends JavaPlugin {
+public final class UltimateBottles extends SongodaPlugin {
 
     private static UltimateBottles instance;
     private Map<UUID, Long> cooldownMap;
-    private ServerVersion serverVersion = ServerVersion.fromPackageName(Bukkit.getServer().getClass().getPackage().getName());
+    private ServerVersion serverVersion = ServerVersion.getServerVersion();
     private Lang lang;
     private CommandManager commandManager;
-    private Locale locale;
-    private SettingsManager settingsManager;
+    private GuiManager guiManager = new GuiManager(this);
 
     public static UltimateBottles getInstance() {
         return instance;
     }
 
     @Override
-    public void onEnable() {
-        getConsoleSender().sendMessage(color("&a============================="));
-        getConsoleSender().sendMessage(color("&7" + getDescription().getName() + " " + getDescription().getVersion() + " by &5Songoda <3&7!"));
-        getConsoleSender().sendMessage(color("&7Action: &aEnabling&7..."));
-
+    public void onPluginLoad() {
         instance = this;
-
-        this.settingsManager = new SettingsManager(this);
-        this.settingsManager.setupConfig();
-
-        cooldownMap = new HashMap<>();
-        lang = new Lang(this);
-        this.commandManager = new CommandManager(this);
-
-        new Locale(this, "en_US");
-        this.locale = Locale.getLocale(Setting.LANGUGE_MODE.getString());
-
-        //Running Songoda Updater
-        Plugin plugin = new Plugin(this, 68);
-        plugin.addModule(new LocaleModule());
-        SongodaUpdate.load(plugin);
-
-        Bukkit.getPluginManager().registerEvents(new BottleListener(this), this);
-
-        // Starting Metrics
-        new Metrics(this);
-
-        getConsoleSender().sendMessage(color("&a============================="));
     }
 
     @Override
-    public void onDisable() {
-        getConsoleSender().sendMessage(color("&a============================="));
-        getConsoleSender().sendMessage(color("&7" + getDescription().getName() + " " + getDescription().getVersion() + " by &5Songoda <3&7!"));
-        getConsoleSender().sendMessage(color("&7Action: &cDisabling&7..."));
-        getConsoleSender().sendMessage(color("&a============================="));
+    public void onPluginEnable() {
+        // Running Songoda Updater
+        SongodaCore.registerPlugin(this, 68, CompatibleMaterial.EXPERIENCE_BOTTLE);
+
+        Settings.setupConfig();
+        this.setLocale(Settings.LANGUAGE_MODE.getString(), false);
+
+        this.commandManager = new CommandManager(this);
+        this.commandManager.addCommand(new CommandUltimateBottles(this))
+                .addSubCommands(
+                        new CommandCheck(this),
+                        new CommandGive(this),
+                        new CommandReload(this),
+                        new CommandSettings(guiManager),
+                        new CommandBottle(this)
+                );
+
+        guiManager.init();
+
+        cooldownMap = new HashMap<>();
+        lang = new Lang(this);
+
+        Bukkit.getPluginManager().registerEvents(new BottleListener(this), this);
+    }
+
+    @Override
+    public void onPluginDisable() {
+    }
+
+    @Override
+    public void onConfigReload() {
+        this.setLocale(Settings.LANGUAGE_MODE.getString(), true);
+    }
+
+    @Override
+    public List<Config> getExtraConfig() {
+        return null;
     }
 
     public Map<UUID, Long> getCooldownMap() {
@@ -81,7 +91,7 @@ public final class UltimateBottles extends JavaPlugin {
     }
 
     public ItemStack createBottle(String creator, long amount) {
-        Material material = Setting.BOTTLE_ITEM.getMaterial();
+        Material material = Settings.BOTTLE_ITEM.getMaterial().getMaterial();
 
         ItemStack itemStack = new ItemStack(material);
         ItemMeta meta = itemStack.getItemMeta();
@@ -124,13 +134,5 @@ public final class UltimateBottles extends JavaPlugin {
 
     public CommandManager getCommandManager() {
         return commandManager;
-    }
-
-    public Locale getLocale() {
-        return locale;
-    }
-
-    public SettingsManager getSettingsManager() {
-        return settingsManager;
     }
 }

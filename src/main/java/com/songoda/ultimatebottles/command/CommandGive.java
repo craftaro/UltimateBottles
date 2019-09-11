@@ -1,8 +1,9 @@
-package com.songoda.ultimatebottles.command.commands;
+package com.songoda.ultimatebottles.command;
 
+import com.songoda.core.commands.AbstractCommand;
 import com.songoda.ultimatebottles.UltimateBottles;
-import com.songoda.ultimatebottles.command.AbstractCommand;
 import com.songoda.ultimatebottles.objects.AmountObject;
+import com.songoda.ultimatebottles.utils.Methods;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -13,32 +14,33 @@ import java.util.Optional;
 
 public class CommandGive extends AbstractCommand {
 
-    public CommandGive(AbstractCommand parent) {
-        super(parent, false, "give");
+    private final UltimateBottles instance;
+
+    public CommandGive(UltimateBottles instance) {
+        super(false, "give");
+        this.instance = instance;
     }
 
     @Override
-    protected ReturnType runCommand(UltimateBottles instance, CommandSender sender, String... args) {
+    protected ReturnType runCommand(CommandSender sender, String... args) {
         Player player = (Player) sender;
 
-        if (args.length != 3) {
-            return ReturnType.SYNTAX_ERROR;
-        }
+        if (args.length != 2) return ReturnType.SYNTAX_ERROR;
 
-        if (Bukkit.getPlayer(args[1]) == null) {
+        if (Bukkit.getPlayer(args[0]) == null) {
             instance.getLocale().getMessage("command.general.playernotfound").sendPrefixedMessage(player);
             return ReturnType.FAILURE;
         }
 
-        if (!isInt(args[2])) {
+        if (!Methods.isNumeric(args[1])) {
             instance.getLocale().getMessage("command.general.notanumber").sendPrefixedMessage(player);
             return ReturnType.FAILURE;
         }
 
-        Optional<AmountObject> amountObject = AmountObject.of(args[2]);
+        Optional<AmountObject> amountObject = AmountObject.of(args[1]);
         int toBottle = amountObject.get().getValue();
 
-        Player target = Bukkit.getPlayer(args[1]);
+        Player target = Bukkit.getPlayer(args[0]);
 
         target.getInventory().addItem(instance.createBottle(player.getName(), toBottle));
         instance.getLocale().getMessage("command.give.received")
@@ -50,8 +52,8 @@ public class CommandGive extends AbstractCommand {
     }
 
     @Override
-    protected List<String> onTab(UltimateBottles instance, CommandSender sender, String... args) {
-        if (args.length == 2) {
+    protected List<String> onTab(CommandSender sender, String... args) {
+        if (args.length == 1) {
             return null;
         }
 
@@ -65,20 +67,11 @@ public class CommandGive extends AbstractCommand {
 
     @Override
     public String getSyntax() {
-        return "/UltimateBottles give <player> <amount>";
+        return "/ub give <player> <amount>";
     }
 
     @Override
     public String getDescription() {
         return "Give EXP bottles.";
-    }
-
-    private boolean isInt(String str) {
-        try {
-            Integer.parseInt(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
     }
 }

@@ -1,7 +1,7 @@
-package com.songoda.ultimatebottles.command.commands;
+package com.songoda.ultimatebottles.command;
 
+import com.songoda.core.commands.AbstractCommand;
 import com.songoda.ultimatebottles.UltimateBottles;
-import com.songoda.ultimatebottles.command.AbstractCommand;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
@@ -9,19 +9,22 @@ import java.util.List;
 
 public class CommandReload extends AbstractCommand {
 
-    public CommandReload(AbstractCommand parent) {
-        super(parent, false, "reload");
+    private final UltimateBottles instance;
+
+    public CommandReload(UltimateBottles instance) {
+        super(false, "reload");
+        this.instance = instance;
     }
 
     @Override
-    protected ReturnType runCommand(UltimateBottles instance, CommandSender sender, String... args) {
-        instance.reloadConfig();
-        instance.getLocale().getMessage("command.reload.reloaded").sendPrefixedMessage(sender);
+    protected ReturnType runCommand(CommandSender sender, String... strings) {
+        instance.onConfigReload();
+        instance.getLocale().newMessage("&7Configuration and Language files reloaded.").sendPrefixedMessage(sender);
         return ReturnType.SUCCESS;
     }
 
     @Override
-    protected List<String> onTab(UltimateBottles instance, CommandSender sender, String... args) {
+    protected List<String> onTab(CommandSender sender, String... strings) {
         return new ArrayList<>();
     }
 
@@ -32,7 +35,7 @@ public class CommandReload extends AbstractCommand {
 
     @Override
     public String getSyntax() {
-        return "/UltimateBottles reload";
+        return "/ub reload";
     }
 
     @Override

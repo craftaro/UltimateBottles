@@ -31,5 +31,6 @@ public class Settings {
 
     public static void setupConfig() {
         config.load();
+        config.saveChanges();
     }
 }

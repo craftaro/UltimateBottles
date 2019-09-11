@@ -7,12 +7,12 @@ import com.songoda.core.compatibility.CompatibleMaterial;
 import com.songoda.core.compatibility.ServerVersion;
 import com.songoda.core.configuration.Config;
 import com.songoda.core.gui.GuiManager;
-import com.songoda.ultimatebottles.command.CommandBottle;
-import com.songoda.ultimatebottles.command.CommandCheck;
-import com.songoda.ultimatebottles.command.CommandGive;
-import com.songoda.ultimatebottles.command.CommandReload;
-import com.songoda.ultimatebottles.command.CommandSettings;
-import com.songoda.ultimatebottles.command.CommandUltimateBottles;
+import com.songoda.ultimatebottles.commands.CommandBottle;
+import com.songoda.ultimatebottles.commands.CommandCheck;
+import com.songoda.ultimatebottles.commands.CommandGive;
+import com.songoda.ultimatebottles.commands.CommandReload;
+import com.songoda.ultimatebottles.commands.CommandSettings;
+import com.songoda.ultimatebottles.commands.CommandUltimateBottles;
 import com.songoda.ultimatebottles.listeners.BottleListener;
 import com.songoda.ultimatebottles.settings.Settings;
 import com.songoda.ultimatebottles.utils.itemnbtapi.NBTItem;
@@ -33,7 +33,6 @@ public final class UltimateBottles extends SongodaPlugin {
     private static UltimateBottles instance;
     private Map<UUID, Long> cooldownMap;
     private ServerVersion serverVersion = ServerVersion.getServerVersion();
-    private Lang lang;
     private CommandManager commandManager;
     private GuiManager guiManager = new GuiManager(this);
 
@@ -67,7 +66,6 @@ public final class UltimateBottles extends SongodaPlugin {
         guiManager.init();
 
         cooldownMap = new HashMap<>();
-        lang = new Lang(this);
 
         Bukkit.getPluginManager().registerEvents(new BottleListener(this), this);
     }
@@ -126,10 +124,6 @@ public final class UltimateBottles extends SongodaPlugin {
 
     public boolean isServerVersionAtLeast(ServerVersion version) {
         return serverVersion.ordinal() >= version.ordinal();
-    }
-
-    public Lang getLang() {
-        return lang;
     }
 
     public CommandManager getCommandManager() {

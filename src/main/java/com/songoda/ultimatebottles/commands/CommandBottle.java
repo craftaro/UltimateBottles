@@ -1,4 +1,4 @@
-package com.songoda.ultimatebottles.command;
+package com.songoda.ultimatebottles.commands;
 
 import com.songoda.core.commands.AbstractCommand;
 import com.songoda.ultimatebottles.UltimateBottles;
@@ -67,7 +67,7 @@ public class CommandBottle extends AbstractCommand {
         if (!player.hasPermission("ultimatebottles.cooldown.override") && Settings.COOLDOWN.getBoolean()) {
             long time = getCoolDownTime(player);
             instance.getLocale().getMessage("event.cooldown.started")
-                    .processPlaceholder("time", instance.getLang().getCooldownMessage(time - System.currentTimeMillis()));
+                    .processPlaceholder("time", Methods.getCooldownMessage(time - System.currentTimeMillis()));
             instance.getCooldownMap().put(player.getUniqueId(), time);
         }
 

@@ -1,4 +1,4 @@
-package com.songoda.ultimatebottles.command;
+package com.songoda.ultimatebottles.commands;
 
 import com.songoda.core.commands.AbstractCommand;
 import com.songoda.ultimatebottles.UltimateBottles;

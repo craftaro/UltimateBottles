@@ -1,4 +1,4 @@
-package com.songoda.ultimatebottles.command;
+package com.songoda.ultimatebottles.commands;
 
 import com.songoda.core.commands.AbstractCommand;
 import com.songoda.ultimatebottles.UltimateBottles;
@@ -19,7 +19,7 @@ public class CommandReload extends AbstractCommand {
     @Override
     protected ReturnType runCommand(CommandSender sender, String... strings) {
         instance.onConfigReload();
-        instance.getLocale().newMessage("&7Configuration and Language files reloaded.").sendPrefixedMessage(sender);
+        instance.getLocale().getMessage("command.reload.reloaded").sendPrefixedMessage(sender);
         return ReturnType.SUCCESS;
     }
 

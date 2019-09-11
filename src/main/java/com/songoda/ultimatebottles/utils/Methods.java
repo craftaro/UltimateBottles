@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class Methods {
 
@@ -155,6 +156,14 @@ public class Methods {
         public value getValue() {
             return this.y;
         }
+    }
+
+    public static String getCooldownMessage(long time) {
+        return String.format("%d min, %d sec",
+                TimeUnit.MILLISECONDS.toMinutes(time),
+                TimeUnit.MILLISECONDS.toSeconds(time) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time))
+        );
     }
 }
 

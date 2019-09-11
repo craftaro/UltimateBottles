@@ -2,6 +2,7 @@ package com.songoda.ultimatebottles.listeners;
 
 import com.songoda.ultimatebottles.UltimateBottles;
 import com.songoda.ultimatebottles.settings.Settings;
+import com.songoda.ultimatebottles.utils.Methods;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -32,7 +33,7 @@ public class CooldownListener implements Listener {
         }
 
         long timeLeft = instance.getCooldownMap().get(event.getPlayer().getUniqueId()) - System.currentTimeMillis();
-        instance.getLocale().getMessage("event.cooldown.oncooldown").processPlaceholder("time", instance.getLang().getCooldownMessage(timeLeft));
+        instance.getLocale().getMessage("event.cooldown.oncooldown").processPlaceholder("time", Methods.getCooldownMessage(timeLeft));
         event.setCancelled(true);
     }
 }
